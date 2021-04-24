@@ -30,4 +30,4 @@ jobs:
           CLUSTER_NAME: kwetter
           ZONE_NAME: europe-west4-a
         with:
-          args: apply -f ./deployment.yml
+          args: apply -f ./deployment.yaml
