@@ -1,0 +1,59 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kwetter-web-app
+  labels:
+    k8s-app: kwetter-web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kwetter-web-app
+  template:
+    metadata:
+      labels:
+        app: kwetter-web-app
+    spec:
+      containers:
+        - name: kwetter-web-app
+          image: kwetter-web-app
+          imagePullPolicy: Never
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 100m
+              memory: 50Mi
+          ports:
+            - containerPort: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kwetter-web-app
+spec:
+  ports:
+    - name: http
+      targetPort: 80
+      port: 80
+  selector:
+    app: kwetter-web-app
+
+---
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: frontend-ingress
+  annotations:
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+    - host: traefik.internal
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: kwetter-web-app
+              servicePort: http
