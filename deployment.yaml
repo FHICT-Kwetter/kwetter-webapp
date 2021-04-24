@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: kwetter-web-app
-          image: eu.gcr.io/kwetter-web-app
+          image: eu.gcr.io/kwetter-308618/kwetter-web-app
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
 
