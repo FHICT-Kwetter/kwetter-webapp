@@ -15,7 +15,7 @@ jobs:
       - name: Publish Docker Image to Google Container Registry
         uses: kurkop/push-docker-gcr@v1.2.2
         with:
-          docker_image_name: eu.gcr.io/kwetter-web-app
+          docker_image_name: kwetter-web-app
           docker_image_tag: latest
           docker_context: .
           gcr_host: eu.gcr.io
