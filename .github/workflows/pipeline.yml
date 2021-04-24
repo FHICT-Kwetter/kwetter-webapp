@@ -12,18 +12,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
 
-      - name: Setup gcloud CLI tool
-        uses: google-.github-actions/setup-gcloud@v0.2.0
-        with:
-            service_account_key: ${{ secrets.GKE_SA_KEY }}
-            project_id: ${{ secrets.GKE_PROJECT_ID }}
-
-      - name: Configure docker login with cloud
-        run: |-
-           gcloud --quiet auth configure-docker
-
       - name: Publish Docker Image to Google Container Registry
-        uses: Industrial/push-docker-gcr@v1.2.2
+        uses: kurkop/push-docker-gcr@v1.2.2
         with:
           docker_image_name: eu.gcr.io/kwetter-web-app
           docker_image_tag: latest
