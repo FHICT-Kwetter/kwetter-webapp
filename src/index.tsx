@@ -28,7 +28,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     return (
         <ThemeProvider theme={theme}>
             <Switch>
-
                 <Route exact path='/'               component={() => loggedIn ? <Redirect to='/home' /> : <StartPage /> } />
 
                 <Route exact path='/home'           component={HomePage} />

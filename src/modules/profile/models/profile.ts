@@ -1,6 +1,6 @@
 export interface ProfileModel {
     username: string;
     displayName: string;
-    imageLink: string;
+    imageUrl: string;
     bio: string;
 }

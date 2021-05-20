@@ -27,7 +27,7 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
           APPLICATION_CREDENTIALS: ${{ secrets.GKE_SA_KEY }}
-          CLUSTER_NAME: kwetter
+          CLUSTER_NAME: cluster-1
           ZONE_NAME: europe-west4-a
         with:
           args: apply -f ./deployment.yaml

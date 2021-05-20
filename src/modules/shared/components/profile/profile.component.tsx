@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
             <Grid container style={{ padding: 'min(calc(10vw + 7px),67px) 16px 0', position: 'relative', width: '100%', height: 'min(33vw, 199px)', backgroundImage: "url('https://1.bp.blogspot.com/-lg73Nw76yCc/V9_EnSSngLI/AAAAAAAAWxY/bQtB8s4wWPsvzsac3xZYbP--23d-KugzwCLcB/s1600/StarCIO%2BLess%2BCode.jpg')" }}>
                 <img
                     className={classes.profileImage}
-                    src={profile?.imageLink}
+                    src={profile?.imageUrl}
                     alt='profile picture'
                 />
             </Grid>
