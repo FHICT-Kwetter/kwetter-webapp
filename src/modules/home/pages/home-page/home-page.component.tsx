@@ -17,6 +17,7 @@ const HomePage: React.FC = () => {
 
     return (
         <MainTemplate activeMenuOption='home'>
+            {/*<SetupModal open={true} handleClose={() => {}} />*/}
             <CreateKweet />
 
             {

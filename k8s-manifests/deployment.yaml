@@ -13,22 +13,11 @@ spec:
       labels:
         app: kwetter-web-app
     spec:
+      terminationGracePeriodSeconds: 30
       containers:
         - name: kwetter-web-app
-          image: eu.gcr.io/kwetter-308618/kwetter-web-app
-          imagePullPolicy: IfNotPresent
+          image: eu.gcr.io/kwetter-308618/kwetter-web-app:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
 
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: kwetter-web-app
-spec:
-  ports:
-    - name: http
-      targetPort: 80
-      port: 80
-  selector:
-    app: kwetter-web-app

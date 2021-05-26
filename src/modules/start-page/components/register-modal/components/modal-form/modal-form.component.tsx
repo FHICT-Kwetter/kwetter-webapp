@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Grid, Paper, TextField, Typography } from "@material-ui/core";
 import useStyles from "./modal-form.styles";
 import GlobalConfig from "../../../../../../global.config";
-import { ErrorSnackbar } from "../../../../../shared/components";
+import ErrorSnackbar, { SuccessSnackbar } from "modules/shared/components/error-snackbar/error-snackbar.component";
 
 const ModalForm: React.FC = () => {
     const classes = useStyles();
@@ -13,6 +13,7 @@ const ModalForm: React.FC = () => {
     const [repeatedPassword, setRepeatedPassword] = React.useState<string>('');
     const [errorMessage, setErrorMessage] = React.useState<string>('');
     const [networkError, setNetworkError] = React.useState<string>('');
+    const [successMessage, setSuccessMessage] = React.useState<string>('');
 
     const submitRegisterForm = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -33,9 +34,13 @@ const ModalForm: React.FC = () => {
 
             response.then(responseBody => {
                 if (data.ok) {
-
+                    setSuccessMessage('Account created successfully');
                 } else {
-                    setErrorMessage(responseBody.message);
+                    if (responseBody.message){
+                        setErrorMessage(responseBody.message);
+                    } else {
+                        setErrorMessage(responseBody.errors[Object.keys(responseBody.errors)[0]][0]);
+                    }
                 }
             })
         }).catch(err => setNetworkError('Unfortunately a network error occurred.'));
@@ -59,6 +64,7 @@ const ModalForm: React.FC = () => {
                 </form>
             </Grid>
 
+            { successMessage !== '' && <SuccessSnackbar open={true} duration={5000} onClose={() => setSuccessMessage('')} text={successMessage} /> }
             { networkError !== '' && <ErrorSnackbar open={true} duration={5000} onClose={() => setNetworkError('')} text={networkError} /> }
         </Paper>
 

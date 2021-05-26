@@ -10,24 +10,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@main
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # fetch all history so multiple commits can be scanned
 
-      - name: Publish Docker Image to Google Container Registry
+      - name: Publish Docker Image
         uses: kurkop/push-docker-gcr@v1.2.2
         with:
           docker_image_name: kwetter-web-app
           docker_image_tag: latest
           docker_context: .
           gcr_host: eu.gcr.io
-          gcr_project_id: ${{ secrets.GKE_PROJECT_ID }}
-          gcr_service_key: ${{ secrets.GCR_SA_KEY }}
+          gcr_project_id: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}
+          gcr_service_key: ${{ secrets.GOOGLE_CLOUD_REGISTRY_SA_JSON }}
 
-      - name: Deploy
+      - name: Deploy to Kubernetes
         uses: ameydev/gke-kubectl-action@master
         env:
-          PROJECT_ID: ${{ secrets.GKE_PROJECT_ID }}
-          APPLICATION_CREDENTIALS: ${{ secrets.GKE_SA_KEY }}
+          PROJECT_ID: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}
+          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_KUBERNETES_SA_BASE64 }}
           CLUSTER_NAME: cluster-1
           ZONE_NAME: europe-west4-a
         with:
-          args: apply -f ./deployment.yaml
+          args: apply -f ./k8s-manifests
+
+      - name: Rollout to Kubernetes
+        uses: ameydev/gke-kubectl-action@master
+        env:
+          PROJECT_ID: ${{ secrets.GOOGLE_CLOUD_PROJECT_ID }}
+          APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_CLOUD_KUBERNETES_SA_BASE64 }}
+          CLUSTER_NAME: cluster-1
+          ZONE_NAME: europe-west4-a
+        with:
+          args: rollout restart deployment/kwetter-identity-server

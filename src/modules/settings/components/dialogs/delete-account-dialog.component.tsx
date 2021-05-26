@@ -16,7 +16,7 @@ const DeleteAccountDialog: React.FC<DeleteAccountDialogProps> = (props: DeleteAc
     const [error, setError] = React.useState<string>("");
 
     const deleteAccount = (): void => {
-        fetch(`${GlobalConfig.Apis.IdentityServer}/users`, {
+        fetch(`${GlobalConfig.Apis.IdentityServer}/users/me`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem(GlobalConfig.LocalStorage.AccessTokenKey) as string}`,
@@ -27,7 +27,7 @@ const DeleteAccountDialog: React.FC<DeleteAccountDialogProps> = (props: DeleteAc
                 localStorage.removeItem(GlobalConfig.LocalStorage.RefreshTokenKey);
                 localStorage.removeItem(GlobalConfig.LocalStorage.ThemeBackgroundKey);
                 localStorage.removeItem(GlobalConfig.LocalStorage.ThemeColorKey);
-                props.history.push('/auth');
+                props.history.push('/');
             } else {
                 setError('Something went wrong trying to delete this account.');
             }

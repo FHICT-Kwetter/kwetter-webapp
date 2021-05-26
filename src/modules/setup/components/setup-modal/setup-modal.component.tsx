@@ -2,6 +2,8 @@ import React from 'react';
 import { Backdrop, Button, Fade, Grid, Modal, Step, StepLabel, Stepper, Typography } from "@material-ui/core";
 import useStyles from "./setup-modal.styles";
 import SetupProfileImage from "../setup-profile-image/setup-profile-image.component";
+import SetupBioText from "../setup-bio-text/setup-bio-text.component";
+import SetupDisplayName from "../setup-display-name/setup-display-name.component";
 
 interface SetupModalProps {
     open: boolean
@@ -9,13 +11,14 @@ interface SetupModalProps {
 }
 
 const getSteps = (): string[] => {
-    return ['Upload profile image', 'Set bio text'];
+    return ['Upload profile image', 'Set bio text', 'Set display name'];
 }
 
 const getStepContent = (index: number): React.ReactElement => {
     switch (index) {
         case 0: return <SetupProfileImage />
-        case 1: return <Typography>Hello 2</Typography>
+        case 1: return <SetupBioText />
+        case 2: return <SetupDisplayName />
         default: return <></>;
     }
 }
@@ -61,8 +64,18 @@ const SetupModal: React.FC<SetupModalProps> = (props: SetupModalProps) => {
                         getStepContent(activeStep)
                     }
 
-                    <Button onClick={handlePrevStep}>Back</Button>
-                    <Button onClick={handleNextStep}>Next</Button>
+
+                    {
+                        activeStep !== 2 ? <Button onClick={handleNextStep}>Next</Button> : null
+                    }
+
+                    {
+                        activeStep !== 0 ? <Button onClick={handlePrevStep}>Back</Button> : null
+                    }
+
+                    {
+                        activeStep == 2 ? <Button onClick={props.handleClose}>Finish</Button> : null
+                    }
 
                 </Grid>
             </Fade>

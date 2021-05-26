@@ -18,6 +18,20 @@ const useStyles = makeStyles((theme) => ({
             outline: 'none',
         }
     },
+    inactiveMenuItem: {
+        marginTop: '16px',
+        borderRadius: '60px',
+        '&:hover': {
+            backgroundColor: theme.palette.custom.inactiveIconBackground,
+            borderRadius: '60px',
+            cursor: 'pointer'
+        },
+    },
+    inactiveMenuItemText: {
+        fontFamily: "Roboto",
+        fontSize: "19px",
+        fontWeight: 700
+    },
     activeMenuIcon: {
         color: theme.palette.primary.main,
     },

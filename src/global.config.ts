@@ -3,8 +3,8 @@ const isProd = process.env.NODE_ENV === "production";
 const GlobalConfig = {
 
     Apis: {
-        IdentityServer: isProd ? 'https://kwetter.org/api/auth' : 'http://localhost:5000',
-        ProfileService: 'http://localhost:5001'
+        IdentityServer: isProd ? 'https://www.kwetter.org/api/auth' : 'http://localhost:5000/api/auth',
+        ProfileService: isProd ? 'https://www.kwetter.org/api/profile' : 'http://localhost:5001/api/profile',
     },
 
     LocalStorage: {
@@ -17,10 +17,10 @@ const GlobalConfig = {
     OAuthClient: {
         clientId: 'kwetter-web-app',
         clientSecret: 'kwetter-web-app-secret',
-        tokenUri: isProd ? 'https://kwetter.org/api/auth/connect/token' :  'http://localhost:5000/connect/token',
-        authorizationUri: isProd ? 'https://kwetter.org/api/auth/connect/authorize' : 'http://localhost:5000/connect/authorize',
         grantType: 'password',
-        scope: 'openid email profile offline_access kweet.list'
+        scope: 'openid email profile offline_access kweet.list',
+        tokenUri: isProd ? 'https://www.kwetter.org/api/auth/connect/token' : 'http://localhost:5000/api/auth/connect/token',
+        authorizationUri: isProd ? 'https://www.kwetter.org/api/auth/connect/authorize' : 'http://localhost:5000/api/auth/connect/authorize',
     }
 }
 

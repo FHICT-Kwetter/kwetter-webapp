@@ -7,14 +7,28 @@ const SetupProfileImage: React.FC = () => {
 
     const classes = useStyles();
 
-    const [image, setImage] = React.useState<File | undefined>(undefined);
+    const [profile, setProfile] = React.useState<any>(undefined);
 
+    React.useEffect(() => {
+        fetchProfile();
+    }, [])
+
+    const fetchProfile = (): void => {
+        fetch(`${GlobalConfig.Apis.ProfileService}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem(GlobalConfig.LocalStorage.AccessTokenKey) as string}`,
+            },
+        }).then(data => data.json()).then(response => {
+            setProfile(response);
+        })
+    }
 
     const uploadFile = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const reader = new FileReader();
         reader.readAsDataURL((event.target.files as FileList)[0]);
         reader.onload = () => {
-            fetch('https://kwetter-gcloud-gateway-df0jynj1.ew.gateway.dev/media/upload', {
+            fetch('https://europe-west1-kwetter-308618.cloudfunctions.net/imagekit-upload', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem(GlobalConfig.LocalStorage.AccessTokenKey) as string}`,
@@ -24,9 +38,25 @@ const SetupProfileImage: React.FC = () => {
                 body: new URLSearchParams({
                     'base64image': reader.result as string
                 }),
-            })
+            }).then(res => res.json()).then(response => updateProfileImage(response.url))
         }
+    }
 
+    const updateProfileImage = (imageUrl): void => {
+        fetch(`${GlobalConfig.Apis.ProfileService}/me`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem(GlobalConfig.LocalStorage.AccessTokenKey) as string}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                imageUrl: imageUrl
+            })
+        }).then(data => {
+            if (data.ok) {
+                fetchProfile();
+            }
+        })
     }
 
     return (
@@ -35,8 +65,8 @@ const SetupProfileImage: React.FC = () => {
                 <Typography>Please upload a profile image</Typography>
 
                 {
-                    image !== undefined ?
-                        <img src={URL.createObjectURL(image)} width={200} height={200} /> :
+                    profile !== undefined ?
+                        <img src={profile.imageUrl} width={200} height={200} alt={'profile image is here'} /> :
                         <div style={{ width: '200px', height: '200px', border: '1px solid grey' }} />
                 }
 

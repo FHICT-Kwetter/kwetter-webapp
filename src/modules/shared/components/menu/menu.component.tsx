@@ -3,7 +3,16 @@ import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import useStyles from "./menu.styles";
 
 import MenuOption from "../menu-option/menu-option.component";
-import { BottomNavigation, BottomNavigationAction, Grid, MenuList } from "@material-ui/core";
+import {
+    BottomNavigation,
+    BottomNavigationAction,
+    Grid,
+    ListItemIcon,
+    MenuItem,
+    MenuList,
+    Tooltip, Typography,
+    Zoom
+} from "@material-ui/core";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import ExploreOutlinedIcon from "@material-ui/icons/ExploreOutlined";
 import NotificationsNoneOutlinedIcon from "@material-ui/icons/NotificationsNoneOutlined";
@@ -11,13 +20,32 @@ import EmailOutlinedIcon from "@material-ui/icons/EmailOutlined";
 import PersonOutlineOutlinedIcon from "@material-ui/icons/PersonOutlineOutlined";
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined';
 import MoreHorizOutlinedIcon from '@material-ui/icons/MoreHorizOutlined';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import { SpeedDial, SpeedDialAction } from "@material-ui/lab";
 import { useWindowSize } from "../../utils/use-window-size";
+import { logout } from "../../utils/auth";
 
 
 interface MenuProps extends RouteComponentProps {
     activeItem: 'home' | 'explore' | 'notifications' | 'messages' | 'profile' | 'settings' ;
 }
+
+
+const LogoutButton: React.FC = () => {
+    const classes = useStyles();
+    const width = useWindowSize().width;
+
+    const icon = <ExitToAppOutlinedIcon fontSize={width && width > 450 ? "large" : "default" } className={classes.inactiveMenuIcon} />;
+
+    return (
+        <Tooltip title={'Click here to logout'} TransitionComponent={Zoom} enterDelay={50} leaveDelay={50} placeholder='bottom' arrow={true}>
+            <MenuItem className={classes.inactiveMenuItem} onClick={logout}>
+                <ListItemIcon>{ icon }</ListItemIcon>
+                <Typography className={classes.inactiveMenuItemText}>Logout</Typography>
+            </MenuItem>
+        </Tooltip>
+    )
+};
 
 const Menu: React.FC<MenuProps> = ({ activeItem, history }) => {
 
@@ -54,6 +82,7 @@ const Menu: React.FC<MenuProps> = ({ activeItem, history }) => {
                         <MenuOption link='/messages'      tooltip='Messages'      text='Messages'      active={activeItem === 'messages'}      icon={emailIcon} />
                         <MenuOption link='/profile'       tooltip='Profile'       text='Profile'       active={activeItem === 'profile'}       icon={profileIcon} />
                         <MenuOption link='/settings'      tooltip='Settings'      text='Settings'      active={activeItem === 'settings'}      icon={settingsIcon} />
+                        <LogoutButton />
                     </MenuList>
                 ) : width && width > 450 ?
                 (
@@ -64,6 +93,7 @@ const Menu: React.FC<MenuProps> = ({ activeItem, history }) => {
                         <MenuOption link='/messages'       tooltip='Messages'      text='' active={activeItem === 'messages'}      icon={emailIcon} />
                         <MenuOption link='/profile'        tooltip='Profile'       text='' active={activeItem === 'profile'}       icon={profileIcon} />
                         <MenuOption link='/settings'       tooltip='Settings'      text='' active={activeItem === 'settings'}      icon={settingsIcon} />
+                        <LogoutButton />
                     </MenuList>
                 ) : (
                     <Grid className={classes.bottomMenuContainer} container direction='row'>

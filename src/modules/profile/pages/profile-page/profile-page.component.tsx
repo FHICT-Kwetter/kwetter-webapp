@@ -1,12 +1,12 @@
 import React from 'react';
 import MainTemplate from "../../../shared/templates/main-template/main-template.component";
-import Profile from "../../../shared/components/profile/profile.component";
+import ProfileHeader from "../../components/profile/profile-header.component";
 
 
 const ProfilePage: React.FC = () => {
     return (
         <MainTemplate activeMenuOption='profile'>
-            <Profile />
+            <ProfileHeader />
         </MainTemplate>
     )
 };

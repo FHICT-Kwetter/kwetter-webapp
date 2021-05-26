@@ -1,22 +1,23 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { Grid, Typography } from "@material-ui/core";
 import useStyles from "./profile-not-found.styles";
+import { RouteComponentProps } from "react-router-dom";
 
-const ProfileNotFound: React.FC = () => {
+interface ProfileNotFoundProps extends RouteComponentProps { }
+
+const ProfileNotFound: React.FC<ProfileNotFoundProps> = (props: ProfileNotFoundProps) => {
 
     const classes = useStyles();
+    const username = (props.match.params as any).username;
 
     return (
         <>
-            <Grid className={classes.profileHeaderContainer} container direction='row' alignItems='center'>
-                <Typography className={classes.profileHeaderText}>Profile</Typography>
-            </Grid>
-
             <Grid className={classes.profileContainer} container direction='column'>
                 <div className={classes.profileImage} />
             </Grid>
             <Grid className={classes.profileDescriptionContainer} container direction='column'>
-                <Typography className={classes.profileHeaderText}>@dirkheijnen</Typography>
+                <Typography className={classes.profileHeaderText}>@{username}</Typography>
             </Grid>
 
             <Grid container direction='column'>
@@ -26,4 +27,4 @@ const ProfileNotFound: React.FC = () => {
     )
 }
 
-export default ProfileNotFound;
+export default withRouter(ProfileNotFound);

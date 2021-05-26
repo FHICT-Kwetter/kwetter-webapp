@@ -1,16 +1,20 @@
 import React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
-import { isTokenExpired } from "modules/shared/utils/auth";
+import { isLoggedIn, refreshToken } from "modules/shared/utils/auth";
 
-interface ProtectedRouteProps extends RouteProps {}
+interface ProtectedRouteProps extends RouteProps {
+    Component: React.ElementType
+}
 
-const ProtectedRoute : React.FC<ProtectedRouteProps> = (props) => {
+const ProtectedRoute : React.FC<ProtectedRouteProps> = ({ Component, ...props} : ProtectedRouteProps) => {
 
-    const { component } = props;
+    if (!isLoggedIn()) {
+        refreshToken();
+    }
 
     return (
-        <Route {...props} render={() => isTokenExpired() ? <Redirect to='/' /> : component } />
+        <Route {...props} render={props => isLoggedIn() ? <Component { ...props } /> : <Redirect to={'/'} /> } />
     )
-}
+};
 
 export default ProtectedRoute;

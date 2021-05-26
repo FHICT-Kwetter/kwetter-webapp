@@ -9,6 +9,17 @@ interface ErrorSnackbarProps {
     text: string;
 }
 
+export const SuccessSnackbar: React.FC<ErrorSnackbarProps> = (props: ErrorSnackbarProps) => {
+
+    const { open, duration, text, onClose } = props;
+
+    return (
+        <Snackbar open={open} autoHideDuration={duration} onClose={onClose}>
+            <Alert severity='success' onClose={onClose}>{text}</Alert>
+        </Snackbar>
+    )
+};
+
 const ErrorSnackbar: React.FC<ErrorSnackbarProps> = (props: ErrorSnackbarProps) => {
 
     const { open, duration, text, onClose } = props;
@@ -18,6 +29,6 @@ const ErrorSnackbar: React.FC<ErrorSnackbarProps> = (props: ErrorSnackbarProps) 
             <Alert severity='error' onClose={onClose}>{text}</Alert>
         </Snackbar>
     )
-}
+};
 
 export default ErrorSnackbar;
