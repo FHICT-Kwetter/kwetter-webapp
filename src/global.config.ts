@@ -5,6 +5,7 @@ const GlobalConfig = {
     Apis: {
         IdentityServer: isProd ? 'https://www.kwetter.org/api/auth' : 'http://localhost:5000/api/auth',
         ProfileService: isProd ? 'https://www.kwetter.org/api/profile' : 'http://localhost:5001/api/profile',
+        KweetService: isProd ? 'https://www.kwetter.org/api/kweets' : 'http://localhost:5005/api/kweets',
     },
 
     LocalStorage: {

@@ -20,9 +20,9 @@ const FilledNotificationTab: React.FC = () => {
 
     return (
         <Grid container direction='column'>
-            {
-                fakeNotifications.map(notification => <NotificationItem notification={notification} />)
-            }
+            {/*{*/}
+            {/*    fakeNotifications.map(notification => <NotificationItem notification={notification} />)*/}
+            {/*}*/}
         </Grid>
     )
 }

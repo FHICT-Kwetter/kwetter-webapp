@@ -2,14 +2,25 @@ import React from 'react';
 import MainTemplate from "../../../shared/templates/main-template/main-template.component";
 import { Button, Grid, Typography } from "@material-ui/core";
 import useStyles from "./home-page.styles";
-import FakeKweets from "../../../../store/kweets";
 import Kweet from "../../../shared/components/kweet/kweet.component";
 import CreateKweet from "../../../shared/components/create-kweet/create-kweet.component";
-
-
-import SetupModal from "../../../setup/components/setup-modal/setup-modal.component";
+import { KweetModel } from "../../../../store/models";
+import globalConfig from 'global.config';
+import GlobalConfig from "global.config";
 
 const HomePage: React.FC = () => {
+
+    const [kweets, setKweets] = React.useState<KweetModel[]>([]);
+
+    React.useEffect(() => {
+        fetch(`${globalConfig.Apis.KweetService}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem(GlobalConfig.LocalStorage.AccessTokenKey) as string}`,
+            },
+        }).then(data => data.json()).then(res => setKweets(res))
+    }, [])
 
     const classes = useStyles();
 
@@ -17,7 +28,7 @@ const HomePage: React.FC = () => {
 
     return (
         <MainTemplate activeMenuOption='home'>
-            {/*<SetupModal open={true} handleClose={() => {}} />*/}
+
             <CreateKweet />
 
             {
@@ -29,13 +40,12 @@ const HomePage: React.FC = () => {
                     </Grid> :
                     <>
                         {
-                            FakeKweets.map(kweet => <Kweet kweet={kweet} />)
+                            kweets.sort((a, b) => { return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime() })
+                                .map(kweet => <Kweet kweet={kweet} />)
                         }
                     </>
             }
 
-
-            {/*<SetupModal open={true} handleClose={() => console.log("test")} />*/}
         </MainTemplate>
     )
 }

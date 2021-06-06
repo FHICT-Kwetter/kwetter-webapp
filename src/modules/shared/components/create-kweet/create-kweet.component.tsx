@@ -1,11 +1,42 @@
 import React from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { Button, Divider, Grid, LinearProgress, TextField } from "@material-ui/core";
 import useStyles from "./create-kweet.styles";
 import InsertPhotoSharpIcon from '@material-ui/icons/InsertPhotoSharp';
 import VideocamSharpIcon from '@material-ui/icons/VideocamSharp';
 import ImagePreview from "../image-preview/image-preview.component";
+import globalConfig from 'global.config';
+import GlobalConfig from "global.config";
+import { ProfileModel } from "../../../profile/models/profile";
 
-const CreateKweet: React.FC = () => {
+interface CreateKweetProps extends RouteComponentProps { }
+
+const CreateKweet: React.FC<CreateKweetProps> = (props: CreateKweetProps) => {
+
+    const [profile, setProfile] = React.useState<ProfileModel | undefined>(undefined);
+
+    React.useEffect(() => {
+        fetchProfile((props.match.params as any)?.username);
+    }, [])
+
+    const fetchProfile = (username) => {
+        if (username !== undefined) {
+            fetch(`${GlobalConfig.Apis.ProfileService}/${username}`, {
+                method: 'GET'
+            }).then(res => res.json()).then((profile: ProfileModel) => {
+                setProfile(profile);
+            })
+        } else {
+            fetch(`${GlobalConfig.Apis.ProfileService}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem(GlobalConfig.LocalStorage.AccessTokenKey) as string}`,
+                }
+            }).then(res => res.json()).then((profile: ProfileModel) => {
+                setProfile(profile);
+            })
+        }
+    }
 
     const classes = useStyles();
 
@@ -28,10 +59,14 @@ const CreateKweet: React.FC = () => {
     }
 
     const postKweet = (): void => {
-        console.log('kweet', {
-            content: kweetText,
-            files: media,
-        });
+        fetch(`${globalConfig.Apis.KweetService}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem(GlobalConfig.LocalStorage.AccessTokenKey) as string}`,
+            },
+            body: JSON.stringify({ text: kweetText})
+        }).then(res => res.json()).then(() => window.location.reload())
     }
 
     return (
@@ -42,7 +77,7 @@ const CreateKweet: React.FC = () => {
                 <Grid container direction='column' xs={2}>
                     <img
                         className={classes.profileImage}
-                        src='https://cdn5.vectorstock.com/i/thumb-large/17/59/default-placeholder-businessman-half-length-portr-vector-21181759.jpg'
+                        src={`${profile?.imageUrl}`}
                         alt='profile picture'
                     />
                 </Grid>
@@ -114,4 +149,4 @@ const CreateKweet: React.FC = () => {
     )
 }
 
-export default CreateKweet;
+export default withRouter(CreateKweet);

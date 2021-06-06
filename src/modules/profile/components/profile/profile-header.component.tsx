@@ -87,7 +87,7 @@ const ProfileHeader: React.FC<ProfileProps> = (props: ProfileProps) => {
                                 </Grid>
                             </Grid>
 
-                            <ProfileFeed />
+                            <ProfileFeed authorId={profile.userId} />
                         </>
                     )
             }

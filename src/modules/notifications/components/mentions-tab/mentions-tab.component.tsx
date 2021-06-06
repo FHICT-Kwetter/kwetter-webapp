@@ -20,9 +20,9 @@ const FilledMentionsTab: React.FC = () => {
 
     return (
         <Grid container direction='column'>
-            {
-                mentions.map(notification => <NotificationItem notification={notification} />)
-            }
+            {/*{*/}
+            {/*    mentions.map(notification => <NotificationItem notification={notification} />)*/}
+            {/*}*/}
         </Grid>
     )
 }
